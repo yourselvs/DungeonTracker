@@ -1,4 +1,4 @@
-package me.yourselvs;
+package yourselvs.database;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;

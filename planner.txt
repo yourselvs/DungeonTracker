@@ -15,30 +15,27 @@ Commands:
   /dungeon command <dungeon name> <command name> [allow/block]
 
 Processes
-  Independent
-    Create a dungeon
-    Check if a dungeon exists
-    Check if a player exists
-    Get a players record
-    Get player location data
-    Check if a player is in a dungeon
-    Teleport player
-    Get fastest dungeon record
-    Get list of allowed commands in a dungeon
-    Remove a command from being allowed in a dungeon
-    Get the value of a command for a dungeon
-    Get the value of a parameter for a dungeon
-    Change the value of a paramter for a dungeon
-    Get dungeon information
-    Get record times in increasing order for a dungeon
-    Get best completion time for a specific dungeon
-    Create a player record when entering a dungeon
-    Update a player record when they go through a checkpoint
-    Update a player record when they finish a dungeon
-    Update a player record when they leave a dungeon early
-    Check if a completion time is better than the best completion time for that dungeon
-    Delete all data concerning a specific dungeon
-    Get a history of dungeon completions sorted by most recent
-    Get list of parameters
-    Get default parameter setting
-  
+* Create a dungeon
+* Check if a dungeon exists
+- Check if a player exists
+* Get a players record
+- Get player location data
+* Check if a player is in a dungeon
+- Teleport player
+* Get fastest dungeon record
+* Get list of allowed commands in a dungeon
+* Change the value of a command for a dungeon
+* Get the value of a command for a dungeon
+* Get the value of a parameter for a dungeon
+* Change the value of a parameter for a dungeon
+* Get dungeon information
+* Get record times in increasing order for a dungeon
+* Create a player record when entering a dungeon
+* Update a player record when they go through a checkpoint
+* Update a player record when they finish a dungeon
+* Update a player record when they leave a dungeon early
+* Check if a completion time is better than the best completion time for that dungeon
+* Delete all data concerning a specific dungeon
+* Get a history of dungeon completions sorted by most recent
+* Get list of parameters
+- Get default parameter setting
