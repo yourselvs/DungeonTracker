@@ -19,33 +19,33 @@ public class Messenger {
 	
 	public void commandNotAllowed(String dungeon, String command, Player player){
 		sendMessage(player, "You are not allowed to use the command \"" + ChatColor.YELLOW + command + ChatColor.RESET + "\" because you are in dungeon \"" + ChatColor.YELLOW + dungeon + ChatColor.RESET + "\"." );
-		plugin.getLogger().info("Player \"" + player.getName() + "\" tried to use command \"" + command + "\" while in dungeon \"" + dungeon + "\" and was stopped.");
+		sendPlayerLog(player, "tried to use command \"" + command + "\" while in dungeon \"" + dungeon + "\" and was stopped.");
 	}
 	
-	public void dungeonResume(Player player, DungeonRecord record){
+	public void resumeDungeon(Player player, DungeonRecord record){
 		String time = plugin.subtractTime(record.startTime, new Date());
 		sendMessage(player,  "Resuming dungeon \"" + ChatColor.YELLOW + record.dungeon + ChatColor.RESET + "\" with a time of " + ChatColor.YELLOW + time + ChatColor.RESET + "." );
-		plugin.getLogger().info("Player \"" + player.getName() + "\" rejoined and resumed dungeon \"" + record.dungeon + "\" with a time of " + time + ".");
+		sendPlayerLog(player, "rejoined and resumed dungeon \"" + record.dungeon + "\" with a time of " + time + ".");
 	}
 	
-	public void dungeonQuit(Player player, DungeonRecord record){
+	public void quitDungeon(Player player, DungeonRecord record){
 		String time = plugin.subtractTime(record.startTime, new Date());
-		plugin.getLogger().info("Player \"" + player.getName() + "\" quit the server and left dungeon \"" + record.dungeon + "\" with a time of " + time + ".");
+		sendPlayerLog(player, "quit the server and left dungeon \"" + record.dungeon + "\" with a time of " + time + ".");
 	}
 	
-	public void dungeonStart(Player player, DungeonRecord record){
+	public void startDungeon(Player player, DungeonRecord record){
 		String time = plugin.getFormatter().format(record.startTime);
 		sendMessage(player, "Starting dungeon \"" + ChatColor.YELLOW + record.dungeon + ChatColor.RESET + "\" at time " + ChatColor.YELLOW + time + ChatColor.RESET + ".");
-		plugin.getLogger().info("Player \"" + player.getName() + "\" started the dungeon \"" + record.dungeon + "\" at the time " + time + ".");
+		sendPlayerLog(player, "started the dungeon \"" + record.dungeon + "\" at the time " + time + ".");
 	}
 	
-	public void dungeonFinish(Player player, DungeonRecord record){
+	public void finishDungeon(Player player, DungeonRecord record){
 		String time = plugin.subtractTime(record.startTime, record.finishTime);
 		sendMessage(player, "Dungeon \"" + ChatColor.YELLOW + record.dungeon + ChatColor.RESET + "\" finished with a time of " + ChatColor.YELLOW + time + ChatColor.RESET + ".");
-		plugin.getLogger().info("Player \"" + player.getName() + "\" finished the dungeon \"" + record.dungeon + "\" with a time of " + time + ".");
+		sendPlayerLog(player, "finished the dungeon \"" + record.dungeon + "\" with a time of " + time + ".");
 	}
 	
-	public void dungeonBeatPR(Player player, DungeonRecord oldPR, DungeonRecord newPR){
+	public void beatDungeonPR(Player player, DungeonRecord oldPR, DungeonRecord newPR){
 		String oldTime = plugin.subtractTime(oldPR.startTime, oldPR.finishTime);
 		String newTime = plugin.subtractTime(newPR.startTime, newPR.finishTime);
 		
@@ -61,7 +61,7 @@ public class Messenger {
 		sendMessage(player, "You beat your old time by " + ChatColor.YELLOW + difference + ChatColor.RESET + ".");
 	}
 	
-	public void dungeonBeatWR(Player player, DungeonRecord oldPR, DungeonRecord newPR){
+	public void beatDungeonWR(Player player, DungeonRecord oldPR, DungeonRecord newPR){
 		String oldTime = plugin.subtractTime(oldPR.startTime, oldPR.finishTime);
 		String newTime = plugin.subtractTime(newPR.startTime, newPR.finishTime);
 		
@@ -74,15 +74,19 @@ public class Messenger {
 		
 		String difference = plugin.subtractTime(newDate, oldDate);
 		
-		sendServer(ChatColor.DARK_PURPLE + "NEW WORLD RECORD");
-		sendServer(ChatColor.YELLOW + player.getName() + " beat the world record time in \"" + ChatColor.YELLOW + newPR.dungeon + ChatColor.RESET + " with a time of " + ChatColor.YELLOW + newTime + ChatColor.RESET + ", beating the world record by " + ChatColor.YELLOW + difference + ChatColor.RESET + ".");
+		sendServerMessage(ChatColor.DARK_PURPLE + "NEW WORLD RECORD");
+		sendServerMessage(ChatColor.YELLOW + player.getName() + " beat the world record time in \"" + ChatColor.YELLOW + newPR.dungeon + ChatColor.RESET + " with a time of " + ChatColor.YELLOW + newTime + ChatColor.RESET + ", beating the world record by " + ChatColor.YELLOW + difference + ChatColor.RESET + ".");
+	}
+	
+	private void sendPlayerLog(Player player, String message){
+		plugin.getLogger().info("Player \"" + player.getName() + "\" " + message);
 	}
 	
 	private void sendMessage(Player player, String message){
 		player.sendMessage(prefix + " " + ChatColor.RESET + message);
 	}
 	
-	private void sendServer(String message){
+	private void sendServerMessage(String message){
 		for(Player player : plugin.getServer().getOnlinePlayers())
 			sendMessage(player, message);
 	}	

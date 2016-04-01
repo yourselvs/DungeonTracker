@@ -23,20 +23,20 @@ public class PlayerListener implements Listener{
 	public void preprocess(PlayerQuitEvent event) {
 		String dungeon = plugin.getMongo().getPlayerDungeon(event.getPlayer());
 		if(dungeon != null){
-			plugin.getMessenger().dungeonQuit(event.getPlayer(), plugin.getMongo().getCurrentRecord(event.getPlayer()));
+			plugin.getMessenger().quitDungeon(event.getPlayer(), plugin.getMongo().getCurrentRecord(event.getPlayer()));
 		}
 	}
 	
 	public void preprocess(PlayerJoinEvent event) {
 		String dungeon = plugin.getMongo().getPlayerDungeon(event.getPlayer());
 		if(dungeon != null){ // if the joining player is in a dungeon
-			plugin.getMessenger().dungeonResume(event.getPlayer(), plugin.getMongo().getCurrentRecord(event.getPlayer()));
+			plugin.getMessenger().resumeDungeon(event.getPlayer(), plugin.getMongo().getCurrentRecord(event.getPlayer()));
 		}
 	}
 	
 	public void preprocess(PlayerFinishDungeonEvent event) {		
 		DungeonRecord record = plugin.getMongo().finishRecord(event.getPlayer());
-		plugin.getMessenger().dungeonFinish(event.getPlayer(), record);
+		plugin.getMessenger().finishDungeon(event.getPlayer(), record);
 		
 		DungeonRecord pr = plugin.getMongo().getFastestTime(event.getDungeon(), event.getPlayer());
 		DungeonRecord wr = plugin.getMongo().getFastestTime(event.getDungeon());
@@ -49,14 +49,14 @@ public class PlayerListener implements Listener{
 		} catch (ParseException e) {e.printStackTrace();}
 		
 		if(event.getTime().getTime() < prDate.getTime()) // if the player beats their personal record
-			plugin.getMessenger().dungeonBeatPR(event.getPlayer(), pr, record);
+			plugin.getMessenger().beatDungeonPR(event.getPlayer(), pr, record);
 		
 		if(event.getTime().getTime() < wrDate.getTime()) // if the player beats the world record
-			plugin.getMessenger().dungeonBeatWR(event.getPlayer(), wr, record);
+			plugin.getMessenger().beatDungeonWR(event.getPlayer(), wr, record);
 	}
 	
 	public void preprocess(PlayerStartDungeonEvent event) {
 		plugin.getMongo().createRecord(event.getDungeon(), event.getPlayer());
-		plugin.getMessenger().dungeonStart(event.getPlayer(), plugin.getMongo().getCurrentRecord(event.getPlayer()));
+		plugin.getMessenger().startDungeon(event.getPlayer(), plugin.getMongo().getCurrentRecord(event.getPlayer()));
 	}
 }
