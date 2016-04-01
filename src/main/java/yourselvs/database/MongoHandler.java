@@ -1,6 +1,5 @@
 package yourselvs.database;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import org.bukkit.Location;
@@ -58,12 +57,12 @@ public class MongoHandler {
 	}
 	
 	public DungeonRecord getFastestTime(String dungeon, Player player){
-		// TODO Get the fastest time of a player in a dungeon
+		// TODO Get the fastest record of a player in a dungeon
 		return null;
 	}
 	
 	public DungeonRecord getFastestTime(String dungeon){
-		// TODO Get the fastest time in a dungeon
+		// TODO Get the fastest record in a dungeon
 		return null;
 	}
 	
@@ -80,7 +79,7 @@ public class MongoHandler {
 		return null;
 	}
 	
-	public void createRecord(String dungeon, Player player, DateTimeFormatter time){
+	public void createRecord(String dungeon, Player player){
 		// TODO Create a player record when entering a dungeon
 	}
 	
@@ -88,16 +87,22 @@ public class MongoHandler {
 		// TODO Update a player record when they go through a checkpoint
 	}
 	
-	public DungeonRecord finishRecord(Player player){
+	public DungeonRecord getCurrentRecord(Player player){
+		// TODO Get the record of a player in progress
 		return null;
 	}
 	
-	public DungeonRecord leaveRecord(Player plyer){
-		// TODO Update a player record when they leave a dungeon early
+	public DungeonRecord finishRecord(Player player){
+		// TODO Update a player record when they finish a dungeon
 		return null;
 	}
 	
 	public void deleteDungeon(String dungeon){
 		// TODO Delete all data concerning a specific dungeon
+	}
+	
+	public int timesCompleted(String dungeon, Player player){
+		// TODO Get the number of times a dungeon has been completed by a player
+		return 0;
 	}
 }
