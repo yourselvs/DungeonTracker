@@ -1,9 +1,13 @@
 package yourselvs.listeners;
 
+import java.text.ParseException;
+import java.util.Date;
+
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import yourselvs.dungeons.DungeonRecord;
 import yourselvs.dungeons.DungeonTracker;
 import yourselvs.events.PlayerFinishDungeonEvent;
 import yourselvs.events.PlayerStartDungeonEvent;
@@ -19,24 +23,40 @@ public class PlayerListener implements Listener{
 	public void preprocess(PlayerQuitEvent event) {
 		String dungeon = plugin.getMongo().getPlayerDungeon(event.getPlayer());
 		if(dungeon != null){
-			// TODO Save player data on quit
-			event.getPlayer();
+			plugin.getMessenger().dungeonQuit(event.getPlayer(), plugin.getMongo().getCurrentRecord(event.getPlayer()));
 		}
 	}
 	
 	public void preprocess(PlayerJoinEvent event) {
 		String dungeon = plugin.getMongo().getPlayerDungeon(event.getPlayer());
-		if(dungeon != null){
-			// TODO Load player data on join
-			event.getPlayer();
+		if(dungeon != null){ // if the joining player is in a dungeon
+			plugin.getMessenger().dungeonResume(event.getPlayer(), plugin.getMongo().getCurrentRecord(event.getPlayer()));
 		}
 	}
 	
-	public void preprocess(PlayerFinishDungeonEvent event) {
-		 	
+	public void preprocess(PlayerFinishDungeonEvent event) {		
+		DungeonRecord record = plugin.getMongo().finishRecord(event.getPlayer());
+		plugin.getMessenger().dungeonFinish(event.getPlayer(), record);
+		
+		DungeonRecord pr = plugin.getMongo().getFastestTime(event.getDungeon(), event.getPlayer());
+		DungeonRecord wr = plugin.getMongo().getFastestTime(event.getDungeon());
+		
+		Date prDate = null;
+		Date wrDate = null;
+		try {
+			prDate = plugin.getFormatter().parse(plugin.subtractTime(pr.startTime, pr.finishTime));
+			wrDate = plugin.getFormatter().parse(plugin.subtractTime(wr.startTime, wr.finishTime));
+		} catch (ParseException e) {e.printStackTrace();}
+		
+		if(event.getTime().getTime() < prDate.getTime()) // if the player beats their personal record
+			plugin.getMessenger().dungeonBeatPR(event.getPlayer(), pr, record);
+		
+		if(event.getTime().getTime() < wrDate.getTime()) // if the player beats the world record
+			plugin.getMessenger().dungeonBeatWR(event.getPlayer(), wr, record);
 	}
 	
 	public void preprocess(PlayerStartDungeonEvent event) {
-		plugin.getMongo().createRecord(event.getDungeon(), event.getPlayer(), event.getTime());
+		plugin.getMongo().createRecord(event.getDungeon(), event.getPlayer());
+		plugin.getMessenger().dungeonStart(event.getPlayer(), plugin.getMongo().getCurrentRecord(event.getPlayer()));
 	}
 }

@@ -8,10 +8,8 @@ import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerBucketEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
@@ -122,24 +120,6 @@ public class EventListener implements Listener{
 		String dungeon = plugin.getMongo().getPlayerDungeon(event.getPlayer());
 		if(dungeon != null){
 			event.setRespawnLocation(plugin.getMongo().getDungeonSpawn(dungeon));
-		}
-	}
-	
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void preprocess(PlayerQuitEvent event) {
-		String dungeon = plugin.getMongo().getPlayerDungeon(event.getPlayer());
-		if(dungeon != null){
-			// TODO Save player data on quit
-			event.getPlayer();
-		}
-	}
-
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void preprocess(PlayerJoinEvent event) {
-		String dungeon = plugin.getMongo().getPlayerDungeon(event.getPlayer());
-		if(dungeon != null){
-			// TODO Load player data on join
-			event.getPlayer();
 		}
 	}
 }
