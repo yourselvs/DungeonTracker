@@ -1,20 +1,23 @@
 package yourselvs.events;
 
-import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 public class PlayerFinishDungeonEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
-	private String playerName;
-	private DateTimeFormatter time;
+	private Player player;
+	private Date time;
+	private String dungeon;
 	private boolean cancelled;
 
-	public PlayerFinishDungeonEvent(String playerName, DateTimeFormatter time) {
-		this.playerName = playerName;
-		this.setTime(time);
+	public PlayerFinishDungeonEvent(Player player, Date time, String dungeon) {
+		this.player = player;
+		this.time = time;
+		this.setDungeon(dungeon);
 	}
 
 	public HandlerList getHandlers() {
@@ -25,20 +28,28 @@ public class PlayerFinishDungeonEvent extends Event {
 		return handlers;
 	}
 
-	public String getPlayerName() {
-		return playerName;
+	public Player getPlayer() {
+		return player;
 	}
 
-	public void setPlayerName(String playerName) {
-		this.playerName = playerName;
+	public void setPlayer(Player player) {
+		this.player = player;
 	}
 
-	public DateTimeFormatter getTime() {
+	public Date getTime() {
 		return time;
 	}
 
-	public void setTime(DateTimeFormatter time) {
+	public void setTime(Date time) {
 		this.time = time;
+	}
+
+	public String getDungeon() {
+		return dungeon;
+	}
+
+	public void setDungeon(String dungeon) {
+		this.dungeon = dungeon;
 	}
 
 	public boolean isCancelled() {

@@ -1,19 +1,26 @@
 package yourselvs.dungeons;
 
-import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 import org.bukkit.entity.Player;
 
 public class DungeonRecord {
 	public Player player;
 	public String dungeon;
-	public DateTimeFormatter completionTime;
-	public DateTimeFormatter finishTime;
+	public Date startTime;
+	public Date finishTime;
 	
-	public DungeonRecord(String dungeon, Player player, DateTimeFormatter completionTime, DateTimeFormatter finishTime){
+	public DungeonRecord(String dungeon, Player player, Date startTime){
 		this.player = player;
 		this.dungeon = dungeon;
-		this.completionTime = completionTime;
+		this.startTime = startTime;
+		this.finishTime = null;
+	}
+	
+	public DungeonRecord(String dungeon, Player player, Date startTime, Date finishTime){
+		this.player = player;
+		this.dungeon = dungeon;
+		this.startTime = startTime;
 		this.finishTime = finishTime;
 	}
 }

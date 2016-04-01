@@ -1,6 +1,7 @@
 package yourselvs.events;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -10,11 +11,11 @@ public class PlayerStartDungeonEvent extends Event {
 
 	private static final HandlerList handlers = new HandlerList();
 	private Player player;
-	private DateTimeFormatter time;
+	private Date time;
 	private String dungeon;
 	private boolean cancelled;
 
-	public PlayerStartDungeonEvent(Player player, DateTimeFormatter time, String dungeon) {
+	public PlayerStartDungeonEvent(Player player, Date time, String dungeon) {
 		this.player = player;
 		this.time = time;
 		this.dungeon = dungeon;		
@@ -44,11 +45,11 @@ public class PlayerStartDungeonEvent extends Event {
 		this.dungeon = dungeon;
 	}
 
-	public DateTimeFormatter getTime() {
+	public Date getTime() {
 		return time;
 	}
 
-	public void setTime(DateTimeFormatter time) {
+	public void setTime(Date time) {
 		this.time = time;
 	}
 
