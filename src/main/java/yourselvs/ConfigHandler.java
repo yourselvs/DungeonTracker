@@ -11,7 +11,7 @@ import java.util.Map;
 
 import org.yaml.snakeyaml.Yaml;
 
-import yourselvs.dungeons.DungeonTracker;
+import com.mythicacraft.voteroulette.utils.ConfigAccessor;
 
 public class ConfigHandler {
 	private DungeonTracker plugin;
@@ -38,8 +38,9 @@ public class ConfigHandler {
 			fileStream = new FileWriter(defaults);
 			plugin.getLogger().info("No defaults file detected. Writing new one.");
 			
+			ConfigAccessor defaultFile = new ConfigAccessor("defaults.yml");
 			yaml = new Yaml();
-			yaml.dump(plugin.getConfig(), fileStream);
+			yaml.dump(defaultFile, fileStream);
 			
 			fileStream.close();
 			

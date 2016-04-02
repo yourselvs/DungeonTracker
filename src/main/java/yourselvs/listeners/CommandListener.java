@@ -5,7 +5,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-import yourselvs.dungeons.DungeonTracker;
+import yourselvs.DungeonTracker;
 
 public class CommandListener implements Listener{
 	private DungeonTracker plugin;
@@ -20,10 +20,9 @@ public class CommandListener implements Listener{
 		String dungeon = plugin.getMongo().getPlayerDungeon(event.getPlayer());
 		if(dungeon != null && event.getMessage().startsWith("/")){
 			String command = event.getMessage().substring(1);
-			String dungeonName = plugin.getMongo().getPlayerDungeon(event.getPlayer());
-			if(!plugin.getMongo().getCommandValue(dungeonName, command)){
+			if(!plugin.getMongo().getCommandValue(dungeon, command) && !command.equalsIgnoreCase("dungeon leave")){ // if command is not allowed and its not "/dungeon leave"
 				event.setCancelled(true);
-				plugin.getMessenger().commandNotAllowed(dungeonName, command, event.getPlayer());
+				plugin.getMessenger().commandNotAllowed(dungeon, command, event.getPlayer());
 			}
 		}
 	}

@@ -1,0 +1,41 @@
+main: yourselvs.DungeonTracker
+name: DungeonTracker
+version: 1.0
+author: yourselvs
+description: A dungeon manager to allow servers to have timed dungeon courses.
+commands:
+    dungeon:
+        description: Access to DungeonTracker commands.
+        usage: /<command> ?
+        aliases: [dgn, dt, dungeontracker]
+permissions:
+	dungeon.viewinfo:
+		default: true
+	dungeon.join:
+		default: false
+	dungeon.forcejoin:
+		default: false
+	dungeon.forceleave:
+		default: false
+	dungeon.viewleaders:
+		default: true
+	dungeon.viewhistory:
+		default: false
+	dungeon.viewplayerhistory:
+		default: false
+	dungeon.viewrecord:
+		default: true
+	dungeon.viewplayerrecord:
+		default: false
+	dungeon.viewselfrecord:
+		default: true
+	dungeon.viewparam:
+		default: false
+	dungeon.changeparam:
+		default: false
+	dungeon.viewcommand:
+		default: false
+	dungeon.changecommand:
+		default: false
+	dungeon.changedescription:
+		default: false

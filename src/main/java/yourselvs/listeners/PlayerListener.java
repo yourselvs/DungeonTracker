@@ -7,8 +7,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import yourselvs.DungeonTracker;
 import yourselvs.dungeons.DungeonRecord;
-import yourselvs.dungeons.DungeonTracker;
 import yourselvs.events.PlayerFinishDungeonEvent;
 import yourselvs.events.PlayerStartDungeonEvent;
 
@@ -20,21 +20,21 @@ public class PlayerListener implements Listener{
 		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 	
-	public void preprocess(PlayerQuitEvent event) {
+	public void onPlayerQuit(PlayerQuitEvent event) {
 		String dungeon = plugin.getMongo().getPlayerDungeon(event.getPlayer());
 		if(dungeon != null){
 			plugin.getMessenger().quitDungeon(event.getPlayer(), plugin.getMongo().getCurrentRecord(event.getPlayer()));
 		}
 	}
 	
-	public void preprocess(PlayerJoinEvent event) {
+	public void onPlayerJoin(PlayerJoinEvent event) {
 		String dungeon = plugin.getMongo().getPlayerDungeon(event.getPlayer());
 		if(dungeon != null){ // if the joining player is in a dungeon
 			plugin.getMessenger().resumeDungeon(event.getPlayer(), plugin.getMongo().getCurrentRecord(event.getPlayer()));
 		}
 	}
 	
-	public void preprocess(PlayerFinishDungeonEvent event) {		
+	public void onFinishDungeon(PlayerFinishDungeonEvent event) {		
 		DungeonRecord record = plugin.getMongo().finishRecord(event.getPlayer());
 		plugin.getMessenger().finishDungeon(event.getPlayer(), record);
 		
@@ -55,7 +55,7 @@ public class PlayerListener implements Listener{
 			plugin.getMessenger().beatDungeonWR(event.getPlayer(), wr, record);
 	}
 	
-	public void preprocess(PlayerStartDungeonEvent event) {
+	public void onStartDungeon(PlayerStartDungeonEvent event) {
 		plugin.getMongo().createRecord(event.getDungeon(), event.getPlayer());
 		plugin.getMessenger().startDungeon(event.getPlayer(), plugin.getMongo().getCurrentRecord(event.getPlayer()));
 	}

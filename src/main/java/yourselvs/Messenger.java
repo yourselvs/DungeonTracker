@@ -4,13 +4,14 @@ import java.text.ParseException;
 import java.util.Date;
 
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import yourselvs.dungeons.DungeonRecord;
-import yourselvs.dungeons.DungeonTracker;
 
 public class Messenger {
 	private String prefix = "[" + ChatColor.RED + ChatColor.BOLD + "DGN" + ChatColor.RESET + "]";
+	private String unformattedPrefix = "[DGN]";
 	private DungeonTracker plugin;
 	
 	public Messenger(DungeonTracker plugin){
@@ -20,6 +21,14 @@ public class Messenger {
 	public void commandNotAllowed(String dungeon, String command, Player player){
 		sendMessage(player, "You are not allowed to use the command \"" + ChatColor.YELLOW + command + ChatColor.RESET + "\" because you are in dungeon \"" + ChatColor.YELLOW + dungeon + ChatColor.RESET + "\"." );
 		sendPlayerLog(player, "tried to use command \"" + command + "\" while in dungeon \"" + dungeon + "\" and was stopped.");
+	}
+	
+	public void commandNotAllowed(Player player){
+		sendMessage(player, "You are not allowed to use that commmand." );
+	}
+	
+	public void commandNotAllowed(CommandSender player){
+		sendMessage(player, "You are not allowed to use that commmand." );
 	}
 	
 	public void resumeDungeon(Player player, DungeonRecord record){
@@ -78,16 +87,74 @@ public class Messenger {
 		sendServerMessage(ChatColor.YELLOW + player.getName() + " beat the world record time in \"" + ChatColor.YELLOW + newPR.dungeon + ChatColor.RESET + " with a time of " + ChatColor.YELLOW + newTime + ChatColor.RESET + ", beating the world record by " + ChatColor.YELLOW + difference + ChatColor.RESET + ".");
 	}
 	
+	public void commandNotFound(Player player, String command){
+		sendMessage(player, "Command not recognized: " + ChatColor.YELLOW + command);
+	}
+	
+	public void dungeonNotFound(Player player, String dungeon){
+		sendMessage(player, "Dungeon not found: " + ChatColor.YELLOW + dungeon);
+	}
+	
+	public void dungeonNotFound(CommandSender player, String dungeon){
+		sendMessage(player, "Dungeon not found: " + dungeon);
+	}
+	
+	public void playerNotFound(Player sender, String player) {
+		sendMessage(sender, "Player not found: " + ChatColor.YELLOW + player);
+	}
+	
+	public void playerNotFound(CommandSender sender, String player) {
+		sendMessage(sender, "Player not found: " + player);
+	}
+	
+	public void mustBePlayer(CommandSender player){
+		sendMessage(player, "You must be a player to do this.");
+	}
+	
+	public void mustIncludeDungeon(Player player){
+		sendMessage(player, "You must include a dungeon.");
+	}
+	
+	public void mustIncludeDungeon(CommandSender player){
+		sendMessage(player, "You must include a dungeon.");
+	}
+	
+	public void mustIncludePlayer(Player player) {
+		sendMessage(player, "You must include a player.");
+	}
+	
+	public void mustIncludePlayer(CommandSender player) {
+		sendMessage(player, "You must include a player.");
+	}	
+	
+	public void mustBeInDungeon(Player player){
+		sendMessage(player, "You must be in a dungeon to do this.");
+	}
+	
+	public void mustBeInDungeon(CommandSender player){
+		sendMessage(player, "The player must be in a dungeon to do this.");
+	}
+	
+	public void invalidPageNum(Player player) {
+		sendMessage(player, "That is an invalid page.");
+	}
+	
 	private void sendPlayerLog(Player player, String message){
 		plugin.getLogger().info("Player \"" + player.getName() + "\" " + message);
 	}
 	
 	private void sendMessage(Player player, String message){
-		player.sendMessage(prefix + " " + ChatColor.RESET + message);
+		player.sendMessage(prefix + " " + ChatColor.RESET + message + ChatColor.RESET);
+	}
+	
+	private void sendMessage(CommandSender player, String message){
+		player.sendMessage(unformattedPrefix + " " + message);
 	}
 	
 	private void sendServerMessage(String message){
 		for(Player player : plugin.getServer().getOnlinePlayers())
 			sendMessage(player, message);
-	}	
+	}
+
+	
 }

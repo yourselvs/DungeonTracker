@@ -3,10 +3,11 @@ Commands:
   (parameters denoted by '<>' are required, while those denoted by '[]' are optional)
   /dungeon
   /dungeon <dungeon name>
-  /dungeon join <dungeon name> <player name>
-  /dungeon leave [player name]
+  /dungeon join <dungeon name>
+  /dungeon leave
+  /dungeon forcejoin <dungeon name> <player name>
+  /dungeon forceleave <player name>
   /dungeon complete <player name>
-  /dungeon checkpoint <player name>
   /dungeon leaders <dungeon name> [page number]
   /dungeon history <dungeon name> [player name]
   /dungeon record <dungeon name> [player name]

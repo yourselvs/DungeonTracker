@@ -5,13 +5,15 @@ import java.util.ArrayList;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import yourselvs.DungeonTracker;
 import yourselvs.dungeons.Dungeon;
 import yourselvs.dungeons.DungeonRecord;
 
 public class MongoHandler {
+	private DungeonTracker plugin;
 	
-	public MongoHandler(){
-		
+	public MongoHandler(DungeonTracker plugin){
+		this.plugin = plugin;
 	}
 	
 	public String[] getCommandsAllowed(String dungeon){

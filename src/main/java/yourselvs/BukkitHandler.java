@@ -7,8 +7,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import yourselvs.dungeons.DungeonTracker;
-
 public class BukkitHandler {
 	private DungeonTracker plugin;
 	
@@ -22,13 +20,13 @@ public class BukkitHandler {
 		return player.getLocation();
 	}
 	
-	public boolean playerExistsOnline(String name){
+	public Player playerExistsOnline(String name){
 		Collection<? extends Player> onlinePlayers = plugin.getServer().getOnlinePlayers();
 		for(Player player : onlinePlayers){
 			if(player.getName().equalsIgnoreCase(name))
-				return true;
+				return player;
 		}
-		return false;
+		return null;
 	}
 	
 	public boolean playerExistsOffline(String name){

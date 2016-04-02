@@ -1,0 +1,10 @@
+canPickupItem : false
+canManipulateArmorStand : false
+canEnterBed : false
+canUseBucket : false
+canDropItem : false
+canPickupArrow : false
+canChangeExperience : true
+canFly : false
+canSneak : true
+canSprint : true
