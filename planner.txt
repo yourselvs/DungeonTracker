@@ -12,6 +12,7 @@ Commands:
   /dungeon history <dungeon name> [player name]
   /dungeon record <dungeon name> [player name]
   /dungeon create <dungeon name> <creator name>
+  /dungeon delete <dungeon name>
   /dungeon param <dungeon name> <parameter name> [true/false]
   /dungeon command <dungeon name> <command name> [allow/block]
 

@@ -29,13 +29,13 @@ public class BukkitHandler {
 		return null;
 	}
 	
-	public boolean playerExistsOffline(String name){
+	public OfflinePlayer playerExistsOffline(String name){
 		OfflinePlayer[] offlinePlayers = plugin.getServer().getOfflinePlayers();
 		for(OfflinePlayer player : offlinePlayers){
 			if(player.getName().equalsIgnoreCase(name))
-				return true;
+				return player;
 		}
-		return false;
+		return null;
 	}
 	
 	public void setPlayerLocation(Player player, String worldName, int x, int y, int z){

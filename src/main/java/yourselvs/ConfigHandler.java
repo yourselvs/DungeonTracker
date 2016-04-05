@@ -23,7 +23,9 @@ public class ConfigHandler {
 	
 	private Yaml yaml = new Yaml();
 	
-	public ConfigHandler() {
+	public ConfigHandler(DungeonTracker plugin) {
+		this.plugin = plugin;
+		
 		dataFolder = plugin.getDataFolder();
 		if(!dataFolder.exists())
 			dataFolder.mkdir();
@@ -50,7 +52,7 @@ public class ConfigHandler {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Map<String, Boolean> getParamDefault(){
+	public Map<String, Boolean> getParams(){
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			InputStream reader = new FileInputStream(defaults);

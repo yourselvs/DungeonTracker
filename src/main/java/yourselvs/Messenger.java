@@ -91,6 +91,10 @@ public class Messenger {
 		sendMessage(player, "Command not recognized: " + ChatColor.YELLOW + command);
 	}
 	
+	public void commandNotFound(CommandSender player, String command){
+		sendMessage(player, "Command not recognized: " + command);
+	}
+	
 	public void dungeonNotFound(Player player, String dungeon){
 		sendMessage(player, "Dungeon not found: " + ChatColor.YELLOW + dungeon);
 	}
@@ -139,6 +143,34 @@ public class Messenger {
 		sendMessage(player, "That is an invalid page.");
 	}
 	
+	public void mustIncludeCreator(Player player){
+		sendMessage(player, "You must include a creator.");
+	}
+	
+	public void mustIncludeParam(Player player){
+		sendMessage(player, "You must include a parameter.");
+	}
+	
+	public void mustIncludeCommand(Player player){
+		sendMessage(player, "You must include a command.");
+	}
+	
+	public void mustIncludeDifficulty(Player player){
+		sendMessage(player, "You must include a difficulty.");
+	}
+	
+	public void argumentNotFound(Player player, String arg){
+		sendMessage(player, "Argument not found: " + ChatColor.YELLOW + arg);
+	}
+	
+	public void paramNotFound(Player player, String string) {
+		sendMessage(player, "Parameter not found: " + ChatColor.YELLOW + string);
+	}
+	
+	public void difficultyNotFound(Player player, String string) {
+		sendMessage(player, "Difficulty not found: " + ChatColor.YELLOW + string);
+	}
+	
 	private void sendPlayerLog(Player player, String message){
 		plugin.getLogger().info("Player \"" + player.getName() + "\" " + message);
 	}
@@ -154,7 +186,5 @@ public class Messenger {
 	private void sendServerMessage(String message){
 		for(Player player : plugin.getServer().getOnlinePlayers())
 			sendMessage(player, message);
-	}
-
-	
+	}	
 }

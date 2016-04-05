@@ -3,14 +3,13 @@ package yourselvs;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import yourselvs.commands.CommandManager;
 import yourselvs.commands.CommandParser;
 import yourselvs.database.MongoHandler;
 import yourselvs.listeners.CommandListener;
 import yourselvs.listeners.EventListener;
 import yourselvs.listeners.PlayerListener;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -23,7 +22,8 @@ public class DungeonTracker extends JavaPlugin
 	private Messenger messenger;
 	private BukkitHandler bukkit;
 	private CommandParser parser;
-	private PlayerManager manager;
+	private CommandManager manager;
+	private ConfigHandler config;
 	
 	private SimpleDateFormat format;
     
@@ -36,7 +36,8 @@ public class DungeonTracker extends JavaPlugin
     	messenger = new Messenger(this);
     	bukkit = new BukkitHandler(this);
     	parser = new CommandParser(this);
-    	manager = new PlayerManager(this);
+    	manager = new CommandManager(this);
+    	config = new ConfigHandler(this);
     	
     	format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SS");
     	
@@ -50,7 +51,8 @@ public class DungeonTracker extends JavaPlugin
     public Messenger getMessenger() {return messenger;}
     public BukkitHandler getBukkit() {return bukkit;}
     public SimpleDateFormat getFormatter() {return format;}
-    public PlayerManager getManager() {return manager;}
+    public CommandManager getManager() {return manager;}
+    public ConfigHandler getConfigHandler() {return config;}
     
     public String subtractTime(Date date1, Date date2){
 		boolean negative = false;

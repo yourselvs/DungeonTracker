@@ -9,33 +9,21 @@ commands:
         usage: /<command> ?
         aliases: [dgn, dt, dungeontracker]
 permissions:
-	dungeon.viewinfo:
+	dungeon.info:
 		default: true
 	dungeon.join:
-		default: false
+		default: true
 	dungeon.forcejoin:
 		default: false
-	dungeon.forceleave:
-		default: false
-	dungeon.viewleaders:
+	dungeon.leaders:
 		default: true
-	dungeon.viewhistory:
+	dungeon.history:
 		default: false
-	dungeon.viewplayerhistory:
-		default: false
-	dungeon.viewrecord:
+	dungeon.record:
 		default: true
-	dungeon.viewplayerrecord:
+	dungeon.create:
 		default: false
-	dungeon.viewselfrecord:
-		default: true
-	dungeon.viewparam:
+	dungeon.param:
 		default: false
-	dungeon.changeparam:
-		default: false
-	dungeon.viewcommand:
-		default: false
-	dungeon.changecommand:
-		default: false
-	dungeon.changedescription:
+	dungeon.command:
 		default: false
