@@ -1,4 +1,4 @@
-main: yourselvs.DungeonTracker
+main: yourselvs.dungeontracker.DungeonTracker
 name: DungeonTracker
 version: 1.0
 author: yourselvs

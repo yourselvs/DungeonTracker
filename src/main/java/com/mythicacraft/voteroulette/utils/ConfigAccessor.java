@@ -9,7 +9,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
-import yourselvs.DungeonTracker;
+import yourselvs.dungeontracker.DungeonTracker;
 
 public class ConfigAccessor {
 
