@@ -5,22 +5,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
+import yourselvs.DungeonTracker;
+
 public class ConfigAccessor {
 
-	private Plugin plugin = Bukkit.getServer().getPluginManager().getPlugin("DungeonTracker");
+	private Plugin plugin;
 	private final String fileName;
 	private File configFile;
 	private FileConfiguration fileConfiguration;
 	private String folderPath;
 
-	public ConfigAccessor(String fileName) {
-		if (plugin == null)
-			throw new IllegalArgumentException("plugin cannot be null");
+	public ConfigAccessor(String fileName, DungeonTracker plugin) {
+		this.plugin = plugin;
 		this.fileName = fileName;
 		folderPath = plugin.getDataFolder().getAbsolutePath();
 		configFile = new File(folderPath + File.separator + fileName);

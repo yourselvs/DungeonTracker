@@ -30,27 +30,27 @@ public class CommandManager {
 		// TODO Auto-generated method stub
 	}
 	
-	public void getDungeonHistory(Player player, String dungeon){
+	public void viewDungeonHistory(Player player, String dungeon){
 		
 	}
 	
-	public void getPlayerHistory(Player player, String dungeon, String playerName){
+	public void viewPlayerHistory(Player player, String dungeon, String playerName){
 		
 	}
 	
-	public void getRecord(Player player, String dungeon){
+	public void viewRecord(Player player, String dungeon){
 		
 	}
 	
-	public void getRecord(CommandSender sender, String dungeon){
+	public void viewRecord(CommandSender sender, String dungeon){
 		
 	}
 	
-	public void getPlayerRecord(Player player, String dungeon, String playerName){
+	public void viewPlayerRecord(Player player, String dungeon, String playerName){
 		
 	}
 	
-	public void getPlayerRecord(CommandSender sender, String dungeon, String playerName){
+	public void viewPlayerRecord(CommandSender sender, String dungeon, String playerName){
 		
 	}
 	
@@ -66,7 +66,7 @@ public class CommandManager {
 		
 	}
 	
-	public void getParam(Player player, String dungeon, String param){
+	public void viewParam(Player player, String dungeon, String param){
 		
 	}
 	
@@ -78,7 +78,7 @@ public class CommandManager {
 		
 	}
 	
-	public void getCommand(Player player, String dungeon, String command){
+	public void viewCommand(Player player, String dungeon, String command){
 		
 	}
 	

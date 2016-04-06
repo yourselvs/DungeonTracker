@@ -40,7 +40,7 @@ public class ConfigHandler {
 			fileStream = new FileWriter(defaults);
 			plugin.getLogger().info("No defaults file detected. Writing new one.");
 			
-			ConfigAccessor defaultFile = new ConfigAccessor("defaults.yml");
+			ConfigAccessor defaultFile = new ConfigAccessor("defaults.yml", plugin);
 			yaml = new Yaml();
 			yaml.dump(defaultFile, fileStream);
 			

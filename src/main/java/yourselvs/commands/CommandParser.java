@@ -279,13 +279,13 @@ public class CommandParser implements CommandExecutor{
 							if(player == null) // if the player doesn't exist online check offline
 								player = (Player) plugin.getBukkit().playerExistsOffline(command.args[2]);
 							if(player != null){ // if the player exists
-								plugin.getManager().getPlayerHistory(sender, player.getName(), dungeon);
+								plugin.getManager().viewPlayerHistory(sender, player.getName(), dungeon);
 							}
 							else
 								plugin.getMessenger().playerNotFound(command.sender, command.args[2]);
 						}
 						else{
-							plugin.getManager().getDungeonHistory(sender, dungeon);
+							plugin.getManager().viewDungeonHistory(sender, dungeon);
 						}
 					}
 					else
@@ -312,12 +312,12 @@ public class CommandParser implements CommandExecutor{
 							if(player == null) // if the player doesn't exist online check offline
 								player = (Player) plugin.getBukkit().playerExistsOffline(command.args[2]);
 							if(player != null) // if the player exists
-								plugin.getManager().getPlayerRecord(sender, command.args[1], player.getName());
+								plugin.getManager().viewPlayerRecord(sender, command.args[1], player.getName());
 							else
 								plugin.getMessenger().playerNotFound(sender, command.args[2]);
 						}
 						else
-							plugin.getManager().getRecord(sender, command.args[1]);	
+							plugin.getManager().viewRecord(sender, command.args[1]);	
 					}
 					else
 						plugin.getMessenger().dungeonNotFound(sender, command.args[1]);
@@ -336,13 +336,13 @@ public class CommandParser implements CommandExecutor{
 						if(player == null) // if the player doesn't exist online check offline
 							player = (Player) plugin.getBukkit().playerExistsOffline(command.args[2]);
 						if(player != null) // if the player exists
-							plugin.getManager().getPlayerRecord(command.sender, command.args[1], player.getName());
+							plugin.getManager().viewPlayerRecord(command.sender, command.args[1], player.getName());
 						
 						else
 							plugin.getMessenger().playerNotFound(command.sender, command.args[2]);
 					}
 					else
-						plugin.getManager().getRecord(command.sender, command.args[1]);
+						plugin.getManager().viewRecord(command.sender, command.args[1]);
 				}
 				else
 					plugin.getMessenger().dungeonNotFound(command.sender, command.args[1]);
@@ -421,7 +421,7 @@ public class CommandParser implements CommandExecutor{
 										plugin.getMessenger().argumentNotFound(player, command.args[3]);
 								}
 								else
-									plugin.getManager().getParam(player, command.args[1], command.args[2]);
+									plugin.getManager().viewParam(player, command.args[1], command.args[2]);
 							}
 							else
 								plugin.getMessenger().paramNotFound(player, command.args[2]);
@@ -461,7 +461,7 @@ public class CommandParser implements CommandExecutor{
 									plugin.getMessenger().argumentNotFound(player, command.args[3]);
 							}
 							else
-								plugin.getManager().getCommand(player, command.args[1], command.args[2]);
+								plugin.getManager().viewCommand(player, command.args[1], command.args[2]);
 						}
 						else
 							plugin.getMessenger().mustIncludeCommand(player);
