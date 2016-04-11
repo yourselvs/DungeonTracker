@@ -244,7 +244,7 @@ public class CommandParser implements CommandExecutor{
 						int page = 1;
 						if(command.args.length > 2 && isParsableInt(command.args[2])) // if the number included is parsable and if the player included a page number
 							page = Integer.parseInt(command.args[2]);					
-						plugin.getManager().viewLeaderboard(player, command.args[1], page);
+						plugin.getMessenger().viewLeaderboard(player, command.args[1], page);
 					}
 					else
 						plugin.getMessenger().dungeonNotFound(player, command.args[1]);
@@ -262,22 +262,30 @@ public class CommandParser implements CommandExecutor{
 	private void processHistory(DungeonCommand command) {
 		if(command.sender instanceof Player){
 			Player sender = (Player) command.sender;
-			if(sender.hasPermission("dungeon.history")){
-				if(command.args.length > 1){
+			if(sender.hasPermission("dungeon.history")){ // if the sender has permission 
+				if(command.args.length > 1){ // if the sender included a dungeon
 					String dungeon = command.args[1];
 					if(plugin.getMongo().dungeonExists(dungeon)){ // if the dungeon exists
-						if(command.args.length > 2){// if the sender included a player
+						if(command.args.length > 2){// if the sender included a player or page number
 							Player player = plugin.getBukkit().playerExistsOnline(command.args[2]);
 							if(player == null) // if the player doesn't exist online check offline
 								player = (Player) plugin.getBukkit().playerExistsOffline(command.args[2]);
 							if(player != null){ // if the player exists
-								plugin.getManager().viewPlayerHistory(sender, player.getName(), dungeon);
+								int page = 1;
+								if(command.args.length > 3 && isParsableInt(command.args[3])) // if the number included is parsable and if the player included a page number
+									page = Integer.parseInt(command.args[3]);
+								plugin.getMessenger().viewPlayerHistory(sender, player.getName(), dungeon, page);
+							}
+							else if(isParsableInt(command.args[2])){
+								int page = Integer.parseInt(command.args[2]);
+								plugin.getMessenger().viewDungeonHistory(sender, dungeon, page);
 							}
 							else
 								plugin.getMessenger().playerNotFound(command.sender, command.args[2]);
 						}
 						else{
-							plugin.getManager().viewDungeonHistory(sender, dungeon);
+							int page = 1;
+							plugin.getMessenger().viewDungeonHistory(sender, dungeon, page);
 						}
 					}
 					else
@@ -304,12 +312,12 @@ public class CommandParser implements CommandExecutor{
 							if(player == null) // if the player doesn't exist online check offline
 								player = (Player) plugin.getBukkit().playerExistsOffline(command.args[2]);
 							if(player != null) // if the player exists
-								plugin.getManager().viewPlayerRecord(sender, command.args[1], player.getName());
+								plugin.getMessenger().viewPlayerRecord(sender, command.args[1], player.getName());
 							else
 								plugin.getMessenger().playerNotFound(sender, command.args[2]);
 						}
 						else
-							plugin.getManager().viewRecord(sender, command.args[1]);	
+							plugin.getMessenger().viewRecord(sender, command.args[1]);	
 					}
 					else
 						plugin.getMessenger().dungeonNotFound(sender, command.args[1]);
@@ -328,13 +336,13 @@ public class CommandParser implements CommandExecutor{
 						if(player == null) // if the player doesn't exist online check offline
 							player = (Player) plugin.getBukkit().playerExistsOffline(command.args[2]);
 						if(player != null) // if the player exists
-							plugin.getManager().viewPlayerRecord(command.sender, command.args[1], player.getName());
+							plugin.getMessenger().viewPlayerRecord(command.sender, command.args[1], player.getName());
 						
 						else
 							plugin.getMessenger().playerNotFound(command.sender, command.args[2]);
 					}
 					else
-						plugin.getManager().viewRecord(command.sender, command.args[1]);
+						plugin.getMessenger().viewRecord(command.sender, command.args[1]);
 				}
 				else
 					plugin.getMessenger().dungeonNotFound(command.sender, command.args[1]);
@@ -349,22 +357,26 @@ public class CommandParser implements CommandExecutor{
 			Player player = (Player) command.sender;
 			if(player.hasPermission("dungeon.create")){ // if the player has permission to create a dungeon
 				if(command.args.length > 1){ // if the player included a dungeon name
-					if(command.args.length > 2){ // if the player included a difficulty
-						if(isParsableDifficulty(command.args[2])){ // if the difficulty is parsable
-							if(command.args.length > 3){ // if the player included a creator name
-								String creator = "";
-								for(int i = 3; i < command.args.length; i++)
-									creator = creator + command.args[i];
-								plugin.getManager().createDungeon(player, command.args[1], command.args[2], creator);
+					if(!plugin.getMongo().dungeonExists(command.args[1])){ // if the dungeon doesnt already exist
+						if(command.args.length > 2){ // if the player included a difficulty
+							if(isParsableDifficulty(command.args[2])){ // if the difficulty is parsable
+								if(command.args.length > 3){ // if the player included a creator name
+									String creator = "";
+									for(int i = 3; i < command.args.length; i++)
+										creator = creator + command.args[i];
+									plugin.getManager().createDungeon(player, command.args[1], command.args[2], creator);
+								}
+								else
+									plugin.getMessenger().mustIncludeCreator(player);
 							}
 							else
-								plugin.getMessenger().mustIncludeCreator(player);
+								plugin.getMessenger().difficultyNotFound(player, command.args[2]);
 						}
 						else
-							plugin.getMessenger().difficultyNotFound(player, command.args[2]);
+							plugin.getMessenger().mustIncludeDifficulty(player);
 					}
 					else
-						plugin.getMessenger().mustIncludeDifficulty(player);
+						plugin.getMessenger().dungeonAlreadyExists(player);
 				}
 				else
 					plugin.getMessenger().mustIncludeDungeon(player);
@@ -413,7 +425,7 @@ public class CommandParser implements CommandExecutor{
 										plugin.getMessenger().argumentNotFound(player, command.args[3]);
 								}
 								else
-									plugin.getManager().viewParam(player, command.args[1], command.args[2]);
+									plugin.getMessenger().viewParam(player, command.args[1], command.args[2]);
 							}
 							else
 								plugin.getMessenger().paramNotFound(player, command.args[2]);
@@ -445,15 +457,15 @@ public class CommandParser implements CommandExecutor{
 								if(isParsableCommand(command.args[3])){ // if the command can be parsed
 									boolean bool = parseCommand(command.args[3]);
 									if(bool)
-										plugin.getManager().allowCommand(player, command.args[1], command.args[2]);
+										plugin.getManager().setCommand(player, command.args[1], command.args[2], bool);
 									else
-										plugin.getManager().blockCommand(player, command.args[1], command.args[2]);
+										plugin.getManager().setCommand(player, command.args[1], command.args[2], bool);
 								}
 								else
 									plugin.getMessenger().argumentNotFound(player, command.args[3]);
 							}
 							else
-								plugin.getManager().viewCommand(player, command.args[1], command.args[2]);
+								plugin.getMessenger().viewCommand(player, command.args[1], command.args[2]);
 						}
 						else
 							plugin.getMessenger().mustIncludeCommand(player);
@@ -475,7 +487,7 @@ public class CommandParser implements CommandExecutor{
 		if(command.sender instanceof Player){ // if the sender is a player
 			Player player = (Player) command.sender;
 			if(player.hasPermission("dungeon.info")){ // if the player has permission
-				plugin.getManager().viewInfo(player);
+				plugin.getMessenger().viewInfo(player);
 			}
 			else
 				plugin.getMessenger().commandNotAllowed(player);
@@ -488,7 +500,7 @@ public class CommandParser implements CommandExecutor{
 		if(command.sender instanceof Player){
 			Player player = (Player) command.sender;
 			if(player.hasPermission("dungeon.info")){
-				plugin.getManager().viewDungeon(player, command.args[0]);
+				plugin.getMessenger().viewDungeon(player, command.args[0]);
 			}
 			else
 				plugin.getMessenger().commandNotAllowed(player);

@@ -55,11 +55,11 @@ public class MongoHandler {
 		return false;
 	}
 	
-	public void createDungeon(String dungeon, Location location){
+	public void createDungeon(String dungeon, Location location, String difficulty, String creator){
 		// TODO Create a dungeon
 	}
 	
-	public DungeonRecord getFastestTime(String dungeon, Player player){
+	public DungeonRecord getFastestTime(String dungeon, String playerName){
 		// TODO Get the fastest record of a player in a dungeon
 		return null;
 	}
@@ -70,10 +70,12 @@ public class MongoHandler {
 	}
 	
 	public ArrayList<DungeonRecord> getRecords(String dungeon){
+		// TODO Get the records of a dungeon, unsorted
 		return null;
 	}
 	
 	public ArrayList<DungeonRecord> getRecords(String dungeon, Player player){
+		// TODO Get the receords of a specific player in a dungeon, unsorted
 		return null;
 	}
 	
@@ -95,10 +97,20 @@ public class MongoHandler {
 		return null;
 	}
 	
+	public Location getStartLocation(Player player){
+		// TODO Get the location which a player started a dungeon from
+		return null;
+	}
+	
 	public DungeonRecord finishRecord(Player player){
 		// TODO Update a player record when they finish a dungeon
 		return null;
 	}
+	
+	public void deleteRecord(Player player){
+		// TODO Delete any current record of the player
+	}
+	
 	
 	public void deleteDungeon(String dungeon){
 		// TODO Delete all data concerning a specific dungeon

@@ -1,9 +1,12 @@
 package yourselvs.dungeontracker.commands;
 
-import org.bukkit.command.CommandSender;
+import java.text.ParseException;
+import java.util.Date;
+
 import org.bukkit.entity.Player;
 
 import yourselvs.dungeontracker.DungeonTracker;
+import yourselvs.dungeontracker.dungeons.DungeonRecord;
 import yourselvs.dungeontracker.events.PlayerFinishDungeonEvent;
 import yourselvs.dungeontracker.events.PlayerStartDungeonEvent;
 
@@ -15,78 +18,59 @@ public class CommandManager {
 	}
 	
 	public void joinDungeon(PlayerStartDungeonEvent event){
-		// TODO Process having a player join a dungeon
+		// Process having a player join a dungeon
+		plugin.getMongo().createRecord(event.getDungeon(), event.getPlayer());
+		event.getPlayer().teleport(plugin.getMongo().getDungeonSpawn(event.getDungeon()));
+		plugin.getMessenger().startDungeon(event.getPlayer(), plugin.getMongo().getCurrentRecord(event.getPlayer()));
 	}
 	
 	public void leaveDungeon(Player player){
-		// TODO Process having a player leave a dungeon
+		// Process having a player leave a dungeon
+		player.teleport(plugin.getMongo().getStartLocation(player));
+		DungeonRecord record = plugin.getMongo().getCurrentRecord(player);
+		plugin.getMessenger().leaveDungeon(player, record);
+		plugin.getMongo().deleteRecord(player);
 	}
 	
 	public void finishDungeon(PlayerFinishDungeonEvent event){
-		// TODO Process having a player finish a dungeon
-	}
-
-	public void viewLeaderboard(Player player, String dungeon, int page) {
-		// TODO Show a player a dungeon's leaderboard
-	}
-	
-	public void viewDungeonHistory(Player player, String dungeon){
-		// TODO Show a player a dungeon's completion history
-	}
-	
-	public void viewPlayerHistory(Player player, String dungeon, String playerName){
-		// TODO Show a player another player's completion history in a dungeon
-	}
-	
-	public void viewRecord(Player player, String dungeon){
-		// TODO Show a player the world record for a dungeon 
-	}
-	
-	public void viewRecord(CommandSender sender, String dungeon){
-		// TODO Show a non-player the world record for a dungeon
-	}
-	
-	public void viewPlayerRecord(Player player, String dungeon, String playerName){
-		// TODO Show a player a specific player's record for a dungeon
+		// Process having a player finish a dungeon
+		event.getPlayer().teleport(plugin.getMongo().getStartLocation(event.getPlayer()));
+		DungeonRecord record = plugin.getMongo().finishRecord(event.getPlayer());
+		plugin.getMessenger().finishDungeon(event.getPlayer(), record);
+		
+		DungeonRecord pr = plugin.getMongo().getFastestTime(event.getDungeon(), event.getPlayer().getName());
+		DungeonRecord wr = plugin.getMongo().getFastestTime(event.getDungeon());
+		
+		Date prDate = null;
+		Date wrDate = null;
+		try {
+			prDate = plugin.getFormatter().parse(plugin.subtractTime(pr.getStartTime(), pr.getFinishTime()));
+			wrDate = plugin.getFormatter().parse(plugin.subtractTime(wr.getStartTime(), wr.getFinishTime()));
+		} catch (ParseException e) {e.printStackTrace();}
+		
+		if(event.getTime().getTime() < prDate.getTime()) // if the player beats their personal record
+			plugin.getMessenger().beatDungeonPR(event.getPlayer(), pr, record);
+		
+		if(event.getTime().getTime() < wrDate.getTime()) // if the player beats the world record
+			plugin.getMessenger().beatDungeonWR(event.getPlayer(), wr, record);
 	}
 	
-	public void viewPlayerRecord(CommandSender sender, String dungeon, String playerName){
-		// TODO Show a non-player a specific player's record for a dungeon
-	}
-	
-	public void createDungeon(Player sender, String dungeon, String difficulty, String creator){
-		// TODO Create a dungeon with specific parameters
+	public void createDungeon(Player player, String dungeon, String difficulty, String creator){
+		plugin.getMongo().createDungeon(dungeon, player.getLocation(), difficulty, creator);
+		plugin.getMessenger().confirmCreateDungeon(dungeon, player, difficulty);
 	}
 	
 	public void deleteDungeon(Player sender, String dungeon){
-		// TODO Delete a dungeon by name
+		plugin.getMongo().deleteDungeon(dungeon);
+		plugin.getMessenger().confirmDeleteDungeon(sender, dungeon);
 	}
 	
 	public void setParam(Player player, String dungeon, String param, boolean bool){
-		// TODO Set a specific parameter value of a dungeon
-	}
+		plugin.getMongo().updateParamValue(dungeon, param, bool);
+		plugin.getMessenger().confirmUpdateParam(player, dungeon, param, bool);
+	}	
 	
-	public void viewParam(Player player, String dungeon, String param){
-		// TODO Show a player the value of a param
-	}
-	
-	public void allowCommand(Player player, String dungeon, String command){
-		// TODO Set a command to be allowed in a dungeon
-	}
-	
-	public void blockCommand(Player player, String dungeon, String command){
-		// TODO Set a command to be blocked in a dungeon
-	}
-	
-	public void viewCommand(Player player, String dungeon, String command){
-		// TODO Show a player the value of a command
-	}
-	
-	public void viewDungeon(Player player, String dungeon){
-		// TODO Show a player info about a dungeon
-	}
-	
-	public void viewInfo(Player player){
-		// TODO Show a player general plugin info
+	public void setCommand(Player player, String dungeon, String command, boolean bool){
+		plugin.getMongo().updateCommandValue(command, dungeon, bool);
 	}
 }
