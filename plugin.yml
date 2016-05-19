@@ -9,21 +9,25 @@ commands:
         usage: /<command> ?
         aliases: [dgn, dt, dungeontracker]
 permissions:
-	dungeon.info:
-		default: true
-	dungeon.join:
-		default: true
-	dungeon.forcejoin:
-		default: false
-	dungeon.leaders:
-		default: true
-	dungeon.history:
-		default: false
-	dungeon.record:
-		default: true
-	dungeon.create:
-		default: false
-	dungeon.param:
-		default: false
-	dungeon.command:
-		default: false
+    dungeon:
+        default: true
+    dungeon.info:
+        default: true
+    dungeon.join:
+        default: true
+    dungeon.forcejoin:
+        default: op
+    dungeon.list:
+        default: true
+    dungeon.leaders:
+        default: true
+    dungeon.history:
+        default: op
+    dungeon.record:
+        default: true
+    dungeon.create:
+        default: op
+    dungeon.param:
+        default: op
+    dungeon.command:
+        default: op

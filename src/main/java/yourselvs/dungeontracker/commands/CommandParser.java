@@ -1,81 +1,82 @@
 package yourselvs.dungeontracker.commands;
 
 import java.util.Date;
-
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
-import org.bukkit.plugin.PluginManager;
-
 import yourselvs.dungeontracker.DungeonTracker;
 import yourselvs.dungeontracker.events.PlayerFinishDungeonEvent;
 import yourselvs.dungeontracker.events.PlayerStartDungeonEvent;
 
 public class CommandParser implements CommandExecutor{
 	private DungeonTracker plugin;
-	private PluginManager pluginManager;
 	
 	public CommandParser(DungeonTracker plugin){
 		this.plugin = plugin;
-		this.pluginManager = plugin.getServer().getPluginManager();
-		
-		registerPermissions();
+		plugin.getServer().getPluginManager();
 	}
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(cmd.getName().equalsIgnoreCase("dungeon") || cmd.getName().equalsIgnoreCase("dgn") ||
 				cmd.getName().equalsIgnoreCase("dt") || cmd.getName().equalsIgnoreCase("dungeontracker")){
-			DungeonCommand command = new DungeonCommand(sender, cmd, label, args);
-			if(command.args.length > 0){
-				String subcmd = args[0];
-
-				if(subcmd.equalsIgnoreCase("join")){
-					processJoin(command);
-				}
-				else if(subcmd.equalsIgnoreCase("leave")){
-					processLeave(command);
-				}
-				else if(subcmd.equalsIgnoreCase("forcejoin")){
-					processForceJoin(command);
-				}
-				else if(subcmd.equalsIgnoreCase("forceleave")){
-					processForceLeave(command);
-				}
-				else if(subcmd.equalsIgnoreCase("complete")){
-					processComplete(command);
-				}
-				else if(subcmd.equalsIgnoreCase("leaders")){
-					processLeaders(command);
-				}
-				else if(subcmd.equalsIgnoreCase("history")){
-					processHistory(command);
-				}
-				else if(subcmd.equalsIgnoreCase("record")){
-					parseRecord(command);
-				}
-				else if(subcmd.equalsIgnoreCase("create")){
-					processCreate(command);
-				}
-				else if(subcmd.equalsIgnoreCase("delete")){
-					processDelete(command);
-				}
-				else if(subcmd.equalsIgnoreCase("param")){
-					processParam(command);
-				}
-				else if(subcmd.equalsIgnoreCase("command")){
-					processCommand(command);
-				}
-				else if(plugin.getMongo().dungeonExists(subcmd)){
-					processViewDungeon(command);
+			if(sender.hasPermission("dungeon")){
+				DungeonCommand command = new DungeonCommand(sender, cmd, label, args);
+				if(command.args.length > 0){
+					String subcmd = args[0];
+	
+					if(subcmd.equalsIgnoreCase("join")){
+						processJoin(command);
+					}
+					else if(subcmd.equalsIgnoreCase("leave")){
+						processLeave(command);
+					}
+					else if(subcmd.equalsIgnoreCase("forcejoin")){
+						processForceJoin(command);
+					}
+					else if(subcmd.equalsIgnoreCase("forceleave")){
+						processForceLeave(command);
+					}
+					else if(subcmd.equalsIgnoreCase("complete")){
+						processComplete(command);
+					}
+					else {
+						new Thread(new Runnable() {
+							public void run(){
+								if(subcmd.equalsIgnoreCase("create")){
+									processCreate(command);
+								}
+								else if(subcmd.equalsIgnoreCase("delete")){
+									processDelete(command);
+								}
+										/*else if(subcmd.equalsIgnoreCase("param")){
+											processParam(command);
+										}
+										else if(subcmd.equalsIgnoreCase("command")){
+											processCommand(command);
+										}*/
+								else if(subcmd.equalsIgnoreCase("view")){
+									processView(command);
+								}
+								else if(subcmd.equalsIgnoreCase("list")){
+									processList(command);
+								}
+								else if(subcmd.equalsIgnoreCase("help")){
+									processHelp(command);
+								}
+								else
+									processCommandNotFound(command);
+							}
+						}).start();
+					}
 				}
 				else
-					processCommandNotFound(command);
+					processDungeon(command);
 			}
-			else
-				processDungeon(command);
+			else{
+				sender.sendMessage("You are not allowed to use this plugin.");
+			}
 			return true;
 		}
 		return false;
@@ -232,7 +233,7 @@ public class CommandParser implements CommandExecutor{
 				plugin.getMessenger().mustIncludePlayer(command.sender);
 		}
 		else
-			plugin.getMessenger().commandNotAllowed(command.sender);
+			plugin.getMessenger().commandNotAllowed((Player) command.sender);
 	}
 
 	private void processLeaders(DungeonCommand command) {
@@ -301,7 +302,7 @@ public class CommandParser implements CommandExecutor{
 			plugin.getMessenger().mustBePlayer(command.sender);
 	}
 
-	private void parseRecord(DungeonCommand command) {
+	private void processRecord(DungeonCommand command) {
 		if(command.sender instanceof Player){ // if the sender is a player
 			Player sender = (Player) command.sender;
 			if(sender.hasPermission("dungeon.record")){ // if the sender has permission
@@ -363,8 +364,8 @@ public class CommandParser implements CommandExecutor{
 								if(command.args.length > 3){ // if the player included a creator name
 									String creator = "";
 									for(int i = 3; i < command.args.length; i++)
-										creator = creator + command.args[i];
-									plugin.getManager().createDungeon(player, command.args[1], command.args[2], creator);
+										creator = creator + command.args[i] + " ";
+									plugin.getManager().createDungeon(player, command.args[1], command.args[2].toUpperCase(), creator);
 								}
 								else
 									plugin.getMessenger().mustIncludeCreator(player);
@@ -379,7 +380,7 @@ public class CommandParser implements CommandExecutor{
 						plugin.getMessenger().dungeonAlreadyExists(player);
 				}
 				else
-					plugin.getMessenger().mustIncludeDungeon(player);
+					plugin.getMessenger().mustIncludeDungeonName(player);
 			}
 			else
 				plugin.getMessenger().commandNotAllowed(player);
@@ -415,7 +416,7 @@ public class CommandParser implements CommandExecutor{
 				if(command.args.length > 1){ // if the player included a dungeon
 					if(plugin.getMongo().dungeonExists(command.args[1])){ // if the dungeon exists
 						if(command.args.length > 2){ // if the player included a param
-							if(plugin.getConfigHandler().getParams().containsKey(command.args[2])){ // if the param exists
+							if(plugin.getParams().containsKey(command.args[2])){ // if the param exists
 								if(command.args.length > 3){ // if the player included a bool
 									if(isParsableBool(command.args[3])){ // if the bool can be parsed
 										boolean bool = parseBool(command.args[3]);
@@ -454,7 +455,7 @@ public class CommandParser implements CommandExecutor{
 					if(plugin.getMongo().dungeonExists(command.args[1])){ // if the dungeon exists
 						if(command.args.length > 2){ // if the player included a command
 							if(command.args.length > 3){ // if the player included a command
-								if(isParsableCommand(command.args[3])){ // if the command can be parsed
+								if(isParsableBool(command.args[3])){ // if the command can be parsed
 									boolean bool = parseCommand(command.args[3]);
 									if(bool)
 										plugin.getManager().setCommand(player, command.args[1], command.args[2], bool);
@@ -496,14 +497,50 @@ public class CommandParser implements CommandExecutor{
 			plugin.getMessenger().mustBePlayer(command.sender);
 	}
 	
-	private void processViewDungeon(DungeonCommand command) {
+	private void processView(DungeonCommand command) {
 		if(command.sender instanceof Player){
 			Player player = (Player) command.sender;
 			if(player.hasPermission("dungeon.info")){
-				plugin.getMessenger().viewDungeon(player, command.args[0]);
+				if(plugin.getMongo().dungeonExists(command.args[1])){
+					
+					if(player.hasPermission("dungeon.info")){
+						plugin.getMessenger().viewDungeon(player, command.args[1]);
+					}
+					else
+						plugin.getMessenger().commandNotAllowed(player);
+				}
+				else
+					plugin.getMessenger().dungeonNotFound(player, command.args[1]);
 			}
 			else
 				plugin.getMessenger().commandNotAllowed(player);
+		}
+		else
+			plugin.getMessenger().mustBePlayer(command.sender);
+	}
+	
+	private void processList(DungeonCommand command) {
+		if(command.sender instanceof Player){
+			Player player = (Player) command.sender;
+			if(player.hasPermission("dungeon.list")){
+				if(command.args.length > 1 && isParsableInt(command.args[1])){
+					int page = Integer.parseInt(command.args[1]);
+					plugin.getMessenger().listDungeons(player, page);
+				}
+				else
+					plugin.getMessenger().listDungeons(player, 1);
+			}
+			else
+				plugin.getMessenger().commandNotAllowed(player);
+		}
+		else
+			plugin.getMessenger().mustBePlayer(command.sender);
+	}
+	
+	private void processHelp(DungeonCommand command) {
+		if(command.sender instanceof Player){
+			Player player = (Player) command.sender;
+			plugin.getMessenger().viewHelp(player);
 		}
 		else
 			plugin.getMessenger().mustBePlayer(command.sender);
@@ -558,10 +595,5 @@ public class CommandParser implements CommandExecutor{
 				input.equalsIgnoreCase("hard") || input.equalsIgnoreCase("insane"))
 			return true;
 		return false;
-	}
-	
-	private void registerPermissions(){
-		for(String permission : plugin.getConfigHandler().getPermissions())
-			pluginManager.addPermission(new Permission(permission));
 	}
 }

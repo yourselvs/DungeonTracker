@@ -1,10 +1,10 @@
 permissions:
-	dungeon.info
-	dungeon.join
-	dungeon.forcejoin
-	dungeon.leaders
-	dungeon.history
-	dungeon.record
-	dungeon.create
-	dungeon.param
-	dungeon.command
+    dungeon.info
+    dungeon.join
+    dungeon.forcejoin
+    dungeon.leaders
+    dungeon.history
+    dungeon.record
+    dungeon.create
+    dungeon.param
+    dungeon.command

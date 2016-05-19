@@ -1,15 +1,9 @@
 package yourselvs.dungeontracker;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import org.yaml.snakeyaml.Yaml;
 
 import com.mythicacraft.voteroulette.utils.ConfigAccessor;
@@ -59,20 +53,5 @@ public class ConfigHandler {
 		List<String> list = (List<String>) defaultFile.getConfig().getList("permissions");
 		
 		return list;
-	}
-	
-	@SuppressWarnings("unchecked")
-	public Map<String, Boolean> getParams(){
-		Map<String, Object> result = new HashMap<String, Object>();
-		try {
-			InputStream reader = new FileInputStream(defaults);
-			
-			yaml = new Yaml();
-			result = (Map<String, Object>) yaml.load(reader);
-		} catch (FileNotFoundException e) {e.printStackTrace();}
-		Map<String, Boolean> defaults = new HashMap<String, Boolean>();
-		for(String param : result.keySet())
-			defaults.put(param, (Boolean) result.get(param));
-		return defaults;
 	}
 }

@@ -11,15 +11,11 @@ import java.util.List;
 import java.util.ArrayList;
 import org.bson.Document;
 
-public class MongoDBStorage {
+public class MongoDBStorage implements IMongo {
 
 	MongoClient client = null;
 	MongoDatabase db = null;
 	MongoCollection<Document> coll = null;
-	
-	public MongoDBStorage()
-	{
-	}
 	
 	public MongoDBStorage (String connectionString, String dbName, String collectionName)
 	{

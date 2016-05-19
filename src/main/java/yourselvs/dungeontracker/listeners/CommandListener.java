@@ -1,5 +1,6 @@
 package yourselvs.dungeontracker.listeners;
 
+import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -23,6 +24,7 @@ public class CommandListener implements Listener{
 			if(!plugin.getMongo().getCommandValue(dungeon, command) && !command.equalsIgnoreCase("dungeon leave")){ // if command is not allowed and its not "/dungeon leave"
 				event.setCancelled(true);
 				plugin.getMessenger().commandNotAllowed(dungeon, command, event.getPlayer());
+				World world = plugin.getServer().getWorlds().get(0);
 			}
 		}
 	}
